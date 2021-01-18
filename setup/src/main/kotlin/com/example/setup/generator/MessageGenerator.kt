@@ -12,5 +12,7 @@ class MessageGenerator(
     @PostConstruct
     fun setup() {
         kafkaTemplate.send("message-topic", "1", "Steve")
+        kafkaTemplate.send("message-topic", "2", "Another Steve")
+        kafkaTemplate.send("message-topic", "3", "Not Steve")
     }
 }
