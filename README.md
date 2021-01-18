@@ -2,14 +2,20 @@
 
 Dissertation project for Sheffield Hallam University MSc in Digital & Technology Solutions
 
-#### Overview
+## Overview
 
 The purpose of this application is to compare the read and write performances of 
 a Kafka Streams backed State store against a MongoDB based application.
 
-#### Architecture
+## Architecture
 
 ![Architecture Diagram for project](https://github.com/StephenDRoberts/kafka-mongo-comparison/blob/master/assets/KafkaMongoArchitecture.png?raw=true)
+
+## Setup Module
+
+The purpose of the setup module is to create the experiment's data set.
+This is done via a `@PostConstruct` annotation in the MessageGenerator class that runs a function on setup.
+ 
 
 #### Manually reset offsets
 
