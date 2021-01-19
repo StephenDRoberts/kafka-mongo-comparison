@@ -1,0 +1,23 @@
+server:
+  port: 8087
+spring:
+  kafka:
+    bootstrap-servers: localhost:9093
+    consumer:
+      bootstrap-servers: localhost:9093
+      group-id: "kafka-mongo-comparison"
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        "spring.json.trusted.packages": "com.examples.kafkastreams"
+    producer:
+      bootstrap-servers: localhost:9093
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    streams:
+      application-id: "kafka-mongo-comparison"
+      properties:
+        "default.key.serde": org.apache.kafka.common.serialization.Serdes$StringSerde
+        "default.value.serde": org.apache.kafka.common.serialization.Serdes$StringSerde
+        "application.server": localhost:8087
