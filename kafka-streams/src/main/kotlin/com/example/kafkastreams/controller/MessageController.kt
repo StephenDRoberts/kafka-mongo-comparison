@@ -13,12 +13,9 @@ class MessageController(
 ) {
 
     @GetMapping
-    fun getMessages() : Map<String, String>{
+    fun getMessages() : Map<String, String> {
         logger.info { "Retrieving messages" }
         return messageRepository.getLocalUsers()
     }
     companion object: KLogging()
 }
-
-
-

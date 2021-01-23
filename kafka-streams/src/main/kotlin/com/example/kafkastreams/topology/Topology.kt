@@ -27,6 +27,7 @@ class Topology (
                                 .withKeySerde(stringSerde)
                                 .withValueSerde(stringSerde)
                 )
+
     }
     companion object : KLogging()
 }

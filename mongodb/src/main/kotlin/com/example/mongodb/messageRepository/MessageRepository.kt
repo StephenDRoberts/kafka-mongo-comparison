@@ -12,10 +12,15 @@ class MessageRepository(
         private val messageRepositoryInterface: MessageRepositoryInterface
 ) {
 
-    fun placeMessageToDB(message: String){
+    fun placeMessageToDB(message: String) {
         logger.info { "***Trying to save message: $message" }
         val newMessage = Message(key = "1", data = message)
-        messageRepositoryInterface.save(newMessage)
+        val test2 = messageRepositoryInterface.save(newMessage)
+
+        logger.info { "***Here is the other test: $test2***" }
     }
+
+    fun getAllMessages(): List<Message> = messageRepositoryInterface.findAll()
+
     companion object: KLogging()
 }
