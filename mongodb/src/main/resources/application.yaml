@@ -1,0 +1,25 @@
+server:
+  port: 8088
+
+spring:
+  data:
+    mongo:
+      host: 127.0.0.1
+      port: 27017
+      database: Messages
+      user: root
+      password: example
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      bootstrap-servers: localhost:9094
+      group-id: "kafka-mongo-comparison"
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        "spring.json.trusted.packages": "com.examples.kafkastreams"
+    producer:
+      bootstrap-servers: localhost:9094
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
