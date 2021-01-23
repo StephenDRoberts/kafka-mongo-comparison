@@ -21,6 +21,7 @@ class Topology (
                 .map { key, value ->
                     KeyValue(key, value)
                 }
+                .peek { _, value -> logger.info { "Placing message to State store: $value" } }
                 .toTable(
                         Materialized.`as`<String, String>(Stores.persistentKeyValueStore("message-store"))
                                 .withKeySerde(stringSerde)
