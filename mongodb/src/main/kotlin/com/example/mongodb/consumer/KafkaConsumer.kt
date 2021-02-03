@@ -9,10 +9,9 @@ import org.springframework.stereotype.Component
 class KafkaConsumer(private val messageRepository: MessageRepository) {
 
     @KafkaListener(id = "mongo-consumer", topics = ["message-topic"])
-    fun readMessages(message: String) {
+    fun readMessagesFromKafka(message: String) {
         logger.info { "Receiving message: $message"}
         messageRepository.placeMessageToDB(message)
-
     }
 
     companion object : KLogging()

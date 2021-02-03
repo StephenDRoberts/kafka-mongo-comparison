@@ -1,5 +1,14 @@
-{ 
-        "username": "number4",
-	"email": "why@why.com",
-	"password": "why"
+{
+	"id": 5,
+	"sport": "Football",
+	"competition": "Premier League",
+	"tags": [
+		"Premier League",
+		"Football"
+	],
+	"event": {
+		"homeTeam": "Team5A",
+		"awayTeam": "Team5B",
+		"date": "2021-01-23"
+	}
 }

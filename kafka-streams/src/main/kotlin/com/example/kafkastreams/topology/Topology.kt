@@ -1,5 +1,6 @@
 package com.example.kafkastreams.topology
 
+import com.example.kafkastreams.model.TimeTracker
 import mu.KLogging
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.KeyValue
@@ -8,12 +9,13 @@ import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Materialized
 import org.apache.kafka.streams.state.Stores
 import org.springframework.stereotype.Component
+import java.time.Instant
 
 @Component
 class Topology (
-    private val builder: StreamsBuilder
+    private val builder: StreamsBuilder,
+    private val timeTracker: TimeTracker
     ) {
-
     init {
         val stringSerde = Serdes.String()
 
@@ -21,12 +23,16 @@ class Topology (
                 .map { key, value ->
                     KeyValue(key, value)
                 }
-                .peek { _, value -> logger.info { "Placing message to State store: $value" } }
+                .peek { _, value ->
+                    logger.info { "Placing message to State store: $value" }
+                    timeTracker.addTiming(Instant.now())
+                }
                 .toTable(
                         Materialized.`as`<String, String>(Stores.persistentKeyValueStore("message-store"))
                                 .withKeySerde(stringSerde)
                                 .withValueSerde(stringSerde)
                 )
+
     }
     companion object : KLogging()
 }
