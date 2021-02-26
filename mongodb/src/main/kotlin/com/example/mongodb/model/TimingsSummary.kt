@@ -7,5 +7,5 @@ data class TimingsSummary (
     val max: Instant?,
     val count: Int,
     val totalTime: Long?,
-    val avgTime: Long?
+    val avgTime: Float?
 )

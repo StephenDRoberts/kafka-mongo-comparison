@@ -2,14 +2,21 @@ package com.example.kafkastreams.topology
 
 import com.example.kafkastreams.model.TimeTracker
 import mu.KLogging
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.Serdes
+import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.StreamsBuilder
+import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Materialized
 import org.apache.kafka.streams.state.Stores
+import org.springframework.kafka.config.KafkaStreamsConfiguration
+import org.springframework.kafka.config.StreamsBuilderFactoryBean
+import org.springframework.kafka.core.CleanupConfig
 import org.springframework.stereotype.Component
 import java.time.Instant
+import java.util.*
 
 @Component
 class Topology (
@@ -21,7 +28,7 @@ class Topology (
 
         builder.stream("message-topic", Consumed.with(stringSerde, stringSerde))
                 .map { key, value ->
-                    KeyValue(key, value)
+                    KeyValue("1", value)
                 }
                 .peek { _, value ->
                     logger.info { "Placing message to State store: $value" }
@@ -32,7 +39,6 @@ class Topology (
                                 .withKeySerde(stringSerde)
                                 .withValueSerde(stringSerde)
                 )
-
     }
     companion object : KLogging()
 }

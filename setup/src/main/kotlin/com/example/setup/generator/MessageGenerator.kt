@@ -13,7 +13,7 @@ class MessageGenerator(
     @PostConstruct
     fun setup() {
         val today = LocalDate.now().toString()
-        for(i in 1..100000) {
+        for(i in 1..100) {
             val message = mapOf(
                     "id" to i.toString(),
                     "sport" to "Football",
