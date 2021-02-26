@@ -27,6 +27,17 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/poller" />
+        <option name="gradleJvm" value="13 (2)" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/poller" />
+          </set>
+        </option>
+        <option name="useQualifiedModuleNames" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/setup" />
         <option name="gradleJvm" value="13 (2)" />
         <option name="modules">

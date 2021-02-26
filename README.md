@@ -20,6 +20,10 @@ This is done via a `@PostConstruct` annotation in the MessageGenerator class tha
 #### Manually reset offsets
 
 The setup script will create our data set and ideally we only want to run the script once to avoid extra work.
+
+To enable this, we have provided two shell scripts that run as pre-launch configurations for both the MongoDB application and the Kafka streams version.
+These scripts 
+
 One way to do this is to manually reset the offset on the docker image.
 
 To do this we need to run the following commands:  
@@ -32,12 +36,25 @@ To do this we need to run the following commands:
 
   `docker exec -it *<kafka docker image ID>* /bin/bash`
   
-* Reset the offsets: 
- 
-  `kafka-consumer-groups.sh \
-      --bootstrap-server broker:9092 \
-      --group kafka-consumer \
+* Navigate to the `opt/kafka/bin` directory
+  
+* Reset the offsets - normal consumer version (i.e for Mongo app): 
+  ```
+  kafka-consumer-groups.sh \
+      --bootstrap-server localhost:9093 \
+      --group mongo-consumer \
       --topic message-topic \
       --reset-offsets \
       --to-earliest \
-      --execute`
+      --execute
+  ```
+
+* Reset the offsets - kafka-streams version:
+    ```
+  kafka-streams-application-reset.sh \
+        --application-id kafka-mongo-comparison \
+        --input-topics message-topic \
+        --bootstrap-servers localhost:9093 \
+        --zookeeper zookeeper:2181
+  ```
+ 
