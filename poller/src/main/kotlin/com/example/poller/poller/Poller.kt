@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
-import java.nio.file.Paths
 import java.time.Instant
 import javax.annotation.PostConstruct
 
@@ -44,7 +43,7 @@ class Poller() {
 
     fun getAvgWriteDuration() {
         val response = okHttpClient.newCall(createRequest("/messages/timings/summary")).execute()
-//        return response.body?.string()
+//        val responseBody = response.body?.string()
 
         println("AvgDuration")
         println(response.body?.string())
@@ -58,7 +57,7 @@ class Poller() {
         try {
             fileWriter.append("\n")
             fileWriter.append("${avgWriteDuration},${readDuration}")
-            println("Write CSV successfully!")
+            println("Wrote to CSV successfully!")
         } catch (e: Exception) {
             println("Writing CSV error!")
             e.printStackTrace()

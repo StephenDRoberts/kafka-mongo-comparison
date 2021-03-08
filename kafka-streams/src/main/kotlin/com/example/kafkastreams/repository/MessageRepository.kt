@@ -11,7 +11,7 @@ class MessageRepository(
         private val store: StateStoreQuery,
 ) {
 
-    fun getLocalUsers(): Map<String, String> {
+    fun getLocalMessages(): Map<String, String> {
         while (true) {
             try {
                 val stateStore = store.getStore()

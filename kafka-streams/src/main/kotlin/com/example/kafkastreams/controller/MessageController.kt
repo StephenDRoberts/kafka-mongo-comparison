@@ -19,7 +19,7 @@ class MessageController(
     @GetMapping
     fun getMessages() : Map<String, String> {
         logger.info { "Retrieving messages" }
-        return messageRepository.getLocalUsers()
+        return messageRepository.getLocalMessages()
     }
 
     @GetMapping("/timings")

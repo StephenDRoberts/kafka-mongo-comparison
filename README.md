@@ -5,7 +5,7 @@ Dissertation project for Sheffield Hallam University MSc in Digital & Technology
 ## Overview
 
 The purpose of this application is to compare the read and write performances of 
-a Kafka Streams backed State store against a MongoDB based application.
+a Kafka Streams backed State store against a MongoDB based application within the [Spring Boot](https://spring.io/projects/spring-boot) framework.
 
 ## Architecture
 
@@ -27,7 +27,7 @@ a Kafka Streams backed State store against a MongoDB based application.
     1. navigate to the applications folder and run `./gradlew clean bootRun`; or
     2. run the application through your IDEs run functionality.
  
-    The application will the process all the messages in the `message-topic` kafka topic. 
+    The application will process all the messages in the `message-topic` kafka topic. 
     NOTE: once completed, do not stop the application. It will need to stay running for the Poller application to process results.
 * Run the Poller application. This will request statistics from the running application and save them to a CSV file.
      
@@ -41,13 +41,13 @@ This is done via a `@PostConstruct` annotation in the MessageGenerator class tha
 
 #### Manually reset offsets
 
-The setup script will create our data set and ideally we only want to run the script once to avoid extra work.
+The setup script will create our data set. Ideally it would only want to be run once to avoid extra work.
 
-To enable this, we have provided two shell scripts that run as pre-launch configurations for both the MongoDB application, and the Kafka streams version.
+To enable this, there are two shell scripts that run as pre-launch configurations for both the MongoDB application, and the Kafka streams version.
 These scripts reset the offsets read by the application and need to be run only when the application is in a STOPPED state. 
 Therefore, rather than restarting the application you need to ensure that it is stopped fully before restarting, else the reset command will fail. 
 
-An alternative way to do this is to manually reset the offset on the docker image. To do this we need to run the following commands:  
+An alternative way to do this is to manually reset the offset on the docker image. To do this, run the following commands:  
 
 * On your computer run the following command to get a list of docker processes running. Locate the `wurstmeister/kafka` image and fetch its ID.   
   

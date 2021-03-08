@@ -12,7 +12,6 @@ services:
 
   broker:
     image: wurstmeister/kafka:2.12-2.3.0
-#    image: confluentinc/cp-kafka:5.4.0
     container_name: broker
     depends_on:
       - zookeeper
