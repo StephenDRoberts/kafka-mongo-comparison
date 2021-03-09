@@ -15,9 +15,8 @@ class MessageRepository(
         while (true) {
             try {
                 val stateStore = store.getStore()
-                val messages = convertKeyValuesToMap(stateStore.all())
-                logger.info { messages }
-                return messages
+
+                return convertKeyValuesToMap(stateStore.all())
             } catch (e: InvalidStateStoreException) {
                 // store not yet ready for querying
                 logger.info{"retrying..."}
@@ -32,6 +31,8 @@ class MessageRepository(
         val localItemsMap = mutableMapOf<String, String>()
 
         while (items.hasNext()) {
+            logger.info { "here's the next item" }
+
             val keyValuePair = items.next()
             localItemsMap[keyValuePair.key] = keyValuePair.value
         }
