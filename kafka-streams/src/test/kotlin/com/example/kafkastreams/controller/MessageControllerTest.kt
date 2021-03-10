@@ -8,7 +8,6 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import java.time.Instant
 
 internal class MessageControllerTest {

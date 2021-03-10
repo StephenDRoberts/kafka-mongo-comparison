@@ -30,8 +30,6 @@ internal class MessageRepositoryTest {
 
     @Nested
     inner class `Get Local Messages` {
-
-
         @Test
         fun `should return a map of messages`() {
             every { store.getStore().all() } returns keyValueIterator
