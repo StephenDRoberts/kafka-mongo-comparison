@@ -28,7 +28,7 @@ class Topology (
 
         builder.stream("message-topic", Consumed.with(stringSerde, stringSerde))
                 .map { key, value ->
-                    KeyValue("1", value)
+                    KeyValue(key, value)
                 }
                 .peek { _, value ->
                     logger.info { "Placing message to State store: $value" }
