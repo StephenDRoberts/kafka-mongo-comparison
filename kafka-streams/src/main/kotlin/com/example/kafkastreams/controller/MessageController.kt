@@ -34,7 +34,7 @@ class MessageController(
         val max = allTimings.maxOrNull()
         val count = allTimings.size -1
         val totalTime = min?.toEpochMilli()?.let { max?.toEpochMilli()?.minus(it) }
-        val avgTime = totalTime?.div(count)
+        val avgTime = totalTime?.toFloat()?.div(count.toFloat())
         return TimingsSummary(min, max, count, totalTime, avgTime)
     }
 

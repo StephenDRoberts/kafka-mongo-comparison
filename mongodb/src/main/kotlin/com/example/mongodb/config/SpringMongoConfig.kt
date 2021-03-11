@@ -16,7 +16,6 @@ class SpringMongoConfig (
     @Value("\${spring.data.mongo.user}") val mongoUser: String,
     @Value("\${spring.data.mongo.password}") val mongoPassword: String
     ) {
-
         @Bean
         fun mongoDbFactory(): MongoDatabaseFactory {
             val mongoClient = MongoClients.create("mongodb://${mongoUser}:${mongoPassword}@${mongoHost}:${mongoPort}")
@@ -25,8 +24,4 @@ class SpringMongoConfig (
 
         @Bean
         fun mongoTemplate(): MongoTemplate = MongoTemplate(mongoDbFactory())
-
-
     }
-
-
