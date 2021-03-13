@@ -13,11 +13,24 @@ import javax.annotation.PostConstruct
 class Poller() {
 
     private val okHttpClient = OkHttpClient()
+    private val applicationOptions = mapOf(
+        "1" to mapOf(
+                "name" to "Kafka Streams",
+                "id" to "kafkaStreams",
+                "port" to 8087
+        ),
+        "2" to mapOf(
+                "name" to "MongoDB",
+                "id" to "mongoDb",
+                "port" to 8088
+        )
+    )
 
     fun inputPrompt() {
         println("Choose which application you are running (1 or 2):")
-        println("1. Kafka Streams")
-        println("2. MongoDB")
+        for (option in applicationOptions){
+            println("${option.key}. ${option.value["name"]}")
+        }
     }
 
     fun inputValidationCheck(input: String?): Boolean = input == "1" || input =="2"
@@ -25,41 +38,43 @@ class Poller() {
     @PostConstruct
     fun poller() {
         var passInputValidation = false
-
+        var input = ""
         while(!passInputValidation) {
             inputPrompt()
-            val input = readLine()
+            input = readLine().toString()
             passInputValidation = inputValidationCheck(input)
         }
 
+        val id = applicationOptions[input]?.get("id")
+        val port = applicationOptions[input]?.get("port").toString()
 
-            val newFileCreated = File("poller/src/main/resources/results/kafkaStreams.csv").createNewFile()
-            val file = File("poller/src/main/resources/results/kafkaStreams.csv")
+        val newFileCreated = File("poller/src/main/resources/results/${id}.csv").createNewFile()
+        val file = File("poller/src/main/resources/results/${id}.csv")
 
-            if (newFileCreated) {
-                createHeaders(file)
-            }
-            val avgWriteDuration = getAvgWriteDuration()
-            val readDuration = getReadAllDuration()
-            appendToCSV(file, 1, readDuration)
-            println("done")
+        if (newFileCreated) {
+            createHeaders(file)
         }
+        val avgWriteDuration = getAvgWriteDuration(port)
+        val readDuration = getReadAllDuration(port)
+        appendToCSV(file, 1, readDuration)
+        println("done")
+    }
 
-    fun createRequest(urlPath: String): Request {
+    fun createRequest(port: String, urlPath: String): Request {
         return Request.Builder()
-                .url("http://localhost:8087$urlPath")
+                .url("http://localhost:${port}${urlPath}")
                 .build()
     }
 
-    fun getReadAllDuration(): Long {
+    fun getReadAllDuration(port :String): Long {
         val startTime = Instant.now()
-        val response = okHttpClient.newCall(createRequest("/messages")).execute()
+        val response = okHttpClient.newCall(createRequest(port, "/messages")).execute()
         val endTime = Instant.now()
         return endTime.toEpochMilli() - startTime.toEpochMilli()
     }
 
-    fun getAvgWriteDuration() {
-        val response = okHttpClient.newCall(createRequest("/messages/timings/summary")).execute()
+    fun getAvgWriteDuration(port: String) {
+        val response = okHttpClient.newCall(createRequest(port, "/messages/timings/summary")).execute()
 //        val responseBody = response.body?.string()
 
         println("AvgDuration")
