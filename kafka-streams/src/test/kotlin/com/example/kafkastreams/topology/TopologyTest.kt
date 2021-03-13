@@ -45,7 +45,7 @@ internal class TopologyTest() {
         ).toProperties()
 
         val builder = StreamsBuilder()
-        val messageTopology = Topology(builder, timeTracker)
+        Topology(builder, timeTracker)
 
         testDriver = TopologyTestDriver(builder.build(), config)
         val stringSerde = Serdes.String()

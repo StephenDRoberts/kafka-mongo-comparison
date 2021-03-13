@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.0.10.RELEASE"
 	kotlin("jvm") version "1.4.21"
 	kotlin("plugin.spring") version "1.4.21"
+	id("jacoco")
 }
 
 group = "com.example"
@@ -40,13 +41,61 @@ dependencies {
 	testImplementation("org.assertj:assertj-core:3.11.1")
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "11"
+tasks {
+	withType<KotlinCompile> {
+		kotlinOptions {
+			freeCompilerArgs = listOf("-Xjsr305=strict")
+			jvmTarget = "11"
+		}
+	}
+
+	withType<Test> {
+		useJUnitPlatform()
+	}
+
+	test {
+		testLogging {
+			events = mutableSetOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED)
+
+			showExceptions = true
+			showCauses = true
+			showStackTraces = true
+		}
+	}
+
+	jacocoTestReport {
+		reports {
+			xml.isEnabled = false
+			csv.isEnabled = false
+			html.isEnabled = true
+			html.destination = file("$buildDir/reports/coverage")
+		}
+	}
+
+	jacocoTestCoverageVerification {
+		violationRules {
+			isFailOnViolation = true
+			rule {
+				element = "SOURCEFILE"
+				excludes = listOf(
+						"com/example/mongodb/MongodbApplication.kt"
+				)
+				limit {
+
+					// This is the minimum coverage required for the build to pass
+					minimum = "0.8".toBigDecimal()
+				}
+			}
+		}
+	}
+
+	register<Task>("coverage") {
+		group = "verification"
+		description = "Runs the unit tests with coverage."
+		dependsOn(":test", ":jacocoTestReport", ":jacocoTestCoverageVerification")
+		val jacocoTestReport = findByName("jacocoTestReport")
+		jacocoTestReport?.mustRunAfter(findByName("test"))
+		findByName("jacocoTestCoverageVerification")?.mustRunAfter(jacocoTestReport)
 	}
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
