@@ -1,7 +1,11 @@
 package com.example.poller.poller
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileWriter
@@ -13,6 +17,8 @@ import javax.annotation.PostConstruct
 class Poller() {
 
     private val okHttpClient = OkHttpClient()
+    private val objectMapper = jacksonObjectMapper()
+
     private val applicationOptions = mapOf(
         "1" to mapOf(
                 "name" to "Kafka Streams",
@@ -56,7 +62,7 @@ class Poller() {
         }
         val avgWriteDuration = getAvgWriteDuration(port)
         val readDuration = getReadAllDuration(port)
-        appendToCSV(file, 1, readDuration)
+        appendToCSV(file = file, avgWriteDuration = avgWriteDuration , readDuration = readDuration)
         println("done")
     }
 
@@ -66,24 +72,30 @@ class Poller() {
                 .build()
     }
 
-    fun getReadAllDuration(port :String): Long {
+    fun getReadAllDuration(port :String): String {
         val startTime = Instant.now()
         val response = okHttpClient.newCall(createRequest(port, "/messages")).execute()
         val endTime = Instant.now()
-        return endTime.toEpochMilli() - startTime.toEpochMilli()
+        return (endTime.toEpochMilli() - startTime.toEpochMilli()).toString()
     }
 
-    fun getAvgWriteDuration(port: String) {
+    fun getAvgWriteDuration(port: String): String {
         val response = okHttpClient.newCall(createRequest(port, "/messages/timings/summary")).execute()
-//        val responseBody = response.body?.string()
+        val parsedResponse = parseResponse(response)
+        val avgWriteDuration = parsedResponse["avgTime"]
 
         println("AvgDuration")
-        println(response.body?.string())
+        println(avgWriteDuration.toString())
+        return avgWriteDuration.toString()
     }
 
+    fun parseResponse(response: Response): JsonNode {
+        val body = response.body?.string() ?: ""
+        val jsonBody = objectMapper.readValue<JsonNode>(body)
+        return jsonBody
+    }
 
-    fun appendToCSV(file: File, avgWriteDuration: Long,  readDuration: Long) {
-//        val resultsFile = Paths.get("poller/src/main/resources/results/$filename").toFile()
+    fun appendToCSV(file: File, avgWriteDuration: String,  readDuration: String) {
         val fileWriter = FileWriter(file, true)
 
         try {

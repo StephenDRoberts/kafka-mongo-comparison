@@ -21,6 +21,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("com.squareup.okhttp3:okhttp:4.9.0")
 	implementation("com.opencsv:opencsv:5.3")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.+")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
