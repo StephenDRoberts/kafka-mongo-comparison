@@ -14,19 +14,36 @@ class Poller() {
 
     private val okHttpClient = OkHttpClient()
 
+    fun inputPrompt() {
+        println("Choose which application you are running (1 or 2):")
+        println("1. Kafka Streams")
+        println("2. MongoDB")
+    }
+
+    fun inputValidationCheck(input: String?): Boolean = input == "1" || input =="2"
+
     @PostConstruct
     fun poller() {
-        val newFileCreated = File("poller/src/main/resources/results/kafkaStreams.csv").createNewFile()
-        val file = File("poller/src/main/resources/results/kafkaStreams.csv")
+        var passInputValidation = false
 
-        if(newFileCreated) {
-            createHeaders(file)
+        while(!passInputValidation) {
+            inputPrompt()
+            val input = readLine()
+            passInputValidation = inputValidationCheck(input)
         }
-        val avgWriteDuration = getAvgWriteDuration()
-        val readDuration = getReadAllDuration()
-        appendToCSV(file, 1, readDuration)
-        println("done")
-    }
+
+
+            val newFileCreated = File("poller/src/main/resources/results/kafkaStreams.csv").createNewFile()
+            val file = File("poller/src/main/resources/results/kafkaStreams.csv")
+
+            if (newFileCreated) {
+                createHeaders(file)
+            }
+            val avgWriteDuration = getAvgWriteDuration()
+            val readDuration = getReadAllDuration()
+            appendToCSV(file, 1, readDuration)
+            println("done")
+        }
 
     fun createRequest(urlPath: String): Request {
         return Request.Builder()
