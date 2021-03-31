@@ -1,9 +1,5 @@
 name: Build
-on:
-  push:
-    branches:
-      - master
-      - GitHubActions
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
