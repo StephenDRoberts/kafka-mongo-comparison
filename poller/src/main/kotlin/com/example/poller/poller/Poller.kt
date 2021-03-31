@@ -1,7 +1,11 @@
 package com.example.poller.poller
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileWriter
@@ -13,45 +17,85 @@ import javax.annotation.PostConstruct
 class Poller() {
 
     private val okHttpClient = OkHttpClient()
+    private val objectMapper = jacksonObjectMapper()
+
+    private val applicationOptions = mapOf(
+        "1" to mapOf(
+                "name" to "Kafka Streams",
+                "id" to "kafkaStreams",
+                "port" to 8087
+        ),
+        "2" to mapOf(
+                "name" to "MongoDB",
+                "id" to "mongoDb",
+                "port" to 8088
+        )
+    )
+
+    fun inputPrompt() {
+        println("Choose which application you are running (1 or 2):")
+        for (option in applicationOptions){
+            println("${option.key}. ${option.value["name"]}")
+        }
+    }
+
+    fun inputValidationCheck(input: String?): Boolean = input == "1" || input =="2"
 
     @PostConstruct
     fun poller() {
-        val newFileCreated = File("poller/src/main/resources/results/kafkaStreams.csv").createNewFile()
-        val file = File("poller/src/main/resources/results/kafkaStreams.csv")
+        var passInputValidation = false
+        var input = ""
+        while(!passInputValidation) {
+            inputPrompt()
+            input = readLine().toString()
+            passInputValidation = inputValidationCheck(input)
+        }
 
-        if(newFileCreated) {
+        val id = applicationOptions[input]?.get("id")
+        val port = applicationOptions[input]?.get("port").toString()
+
+        val newFileCreated = File("poller/src/main/resources/results/${id}.csv").createNewFile()
+        val file = File("poller/src/main/resources/results/${id}.csv")
+
+        if (newFileCreated) {
             createHeaders(file)
         }
-        val avgWriteDuration = getAvgWriteDuration()
-        val readDuration = getReadAllDuration()
-        appendToCSV(file, 1, readDuration)
+        val avgWriteDuration = getAvgWriteDuration(port)
+        val readDuration = getReadAllDuration(port)
+        appendToCSV(file = file, avgWriteDuration = avgWriteDuration , readDuration = readDuration)
         println("done")
     }
 
-    fun createRequest(urlPath: String): Request {
+    fun createRequest(port: String, urlPath: String): Request {
         return Request.Builder()
-                .url("http://localhost:8087$urlPath")
+                .url("http://localhost:${port}${urlPath}")
                 .build()
     }
 
-    fun getReadAllDuration(): Long {
+    fun getReadAllDuration(port :String): String {
         val startTime = Instant.now()
-        val response = okHttpClient.newCall(createRequest("/messages")).execute()
+        val response = okHttpClient.newCall(createRequest(port, "/messages")).execute()
         val endTime = Instant.now()
-        return endTime.toEpochMilli() - startTime.toEpochMilli()
+        return (endTime.toEpochMilli() - startTime.toEpochMilli()).toString()
     }
 
-    fun getAvgWriteDuration() {
-        val response = okHttpClient.newCall(createRequest("/messages/timings/summary")).execute()
-//        val responseBody = response.body?.string()
+    fun getAvgWriteDuration(port: String): String {
+        val response = okHttpClient.newCall(createRequest(port, "/messages/timings/summary")).execute()
+        val parsedResponse = parseResponse(response)
+        val avgWriteDuration = parsedResponse["avgTime"]
 
         println("AvgDuration")
-        println(response.body?.string())
+        println(avgWriteDuration.toString())
+        return avgWriteDuration.toString()
     }
 
+    fun parseResponse(response: Response): JsonNode {
+        val body = response.body?.string() ?: ""
+        val jsonBody = objectMapper.readValue<JsonNode>(body)
+        return jsonBody
+    }
 
-    fun appendToCSV(file: File, avgWriteDuration: Long,  readDuration: Long) {
-//        val resultsFile = Paths.get("poller/src/main/resources/results/$filename").toFile()
+    fun appendToCSV(file: File, avgWriteDuration: String,  readDuration: String) {
         val fileWriter = FileWriter(file, true)
 
         try {
