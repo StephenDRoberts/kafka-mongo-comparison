@@ -11,6 +11,12 @@ jobs:
       - name: Build Kafka Streams + Run Tests
         working-directory: ./kafka-streams
         run: ./gradlew build
+      - name: Code Coverage - Kafka Streams
+        working-directory: ./kafka-streams
+        run: ./gradlew jacocoTestCoverageVerification
       - name: Build Mongo DB + Run Tests
         working-directory: ./mongodb
         run: ./gradlew build
+      - name: Code Coverage - MongoDB
+        working-directory: ./mongodb
+        run: ./gradlew jacocoTestCoverageVerification
