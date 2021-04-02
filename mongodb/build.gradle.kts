@@ -79,7 +79,8 @@ tasks {
 			rule {
 				element = "SOURCEFILE"
 				excludes = listOf(
-						"com/example/mongodb/MongodbApplication.kt"
+						"com/example/mongodb/MongodbApplication.kt",
+						"com/example/mongodb/model/Message.kt"
 				)
 				limit {
 
