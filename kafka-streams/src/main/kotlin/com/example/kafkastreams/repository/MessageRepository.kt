@@ -26,13 +26,9 @@ class MessageRepository(
     }
 
     private fun convertKeyValuesToMap(items: KeyValueIterator<String, String>): Map<String, String> {
-        logger.info { "Mapping" }
-        logger.info { items }
         val localItemsMap = mutableMapOf<String, String>()
 
         while (items.hasNext()) {
-            logger.info { "here's the next item" }
-
             val keyValuePair = items.next()
             localItemsMap[keyValuePair.key] = keyValuePair.value
         }
