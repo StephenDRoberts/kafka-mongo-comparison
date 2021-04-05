@@ -6,6 +6,7 @@ plugins {
 	kotlin("jvm") version "1.4.21"
 	kotlin("plugin.spring") version "1.4.21"
 	id("jacoco")
+	id("project-report")
 }
 
 group = "com.example"
@@ -18,14 +19,18 @@ repositories {
 
 dependencies {
 	// Spring
-	implementation("org.springframework.boot:spring-boot-starter")
-	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter:2.3.4.RELEASE")
+	implementation("org.springframework.boot:spring-boot-starter-web:2.3.4.RELEASE")
 
 	// Mongo
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
 	// Kafka
-	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.springframework.kafka:spring-kafka:2.5.1.RELEASE")
+	implementation("org.apache.kafka:kafka-streams:2.5.1")
+	implementation("org.apache.kafka:kafka-clients:2.5.1")
+	implementation("org.apache.kafka:connect-api:2.5.1")
+	implementation("org.apache.kafka:connect-json:2.5.1")
 
 	// Other
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -37,9 +42,16 @@ dependencies {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 	testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
-	testImplementation("org.springframework.kafka:spring-kafka-test:2.5.1.RELEASE")
+	testImplementation("org.springframework.kafka:spring-kafka-test:2.5.1.RELEASE") {
+//		constraints {
+//			implementation("org.apache.kafka:kafka-streams-test-utils:2.5.1") {
+//				because("compatability failure post 2.5")
+//			}
+//		}
+	}
 	testImplementation("io.mockk:mockk:1.10.2")
 	testImplementation("org.assertj:assertj-core:3.11.1")
+//	testImplementation("de.flapdoodle.embed.mongo:3.0.1-SNAPSHOT")
 }
 
 tasks {
