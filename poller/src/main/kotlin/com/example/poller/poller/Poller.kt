@@ -84,8 +84,6 @@ class Poller() {
         val parsedResponse = parseResponse(response)
         val avgWriteDuration = parsedResponse["avgTime"]
 
-        println("AvgDuration")
-        println(avgWriteDuration.toString())
         return avgWriteDuration.toString()
     }
 
