@@ -10,7 +10,6 @@ class KafkaConsumer(private val messageRepository: MessageRepository) {
 
     @KafkaListener(id = "mongo-consumer", topics = ["message-topic"])
     fun readMessagesFromKafka(message: String) {
-        logger.info { "Receiving message: $message"}
         messageRepository.save(message)
     }
 
