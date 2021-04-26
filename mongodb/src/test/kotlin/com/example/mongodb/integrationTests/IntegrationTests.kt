@@ -53,11 +53,8 @@ class IntegrationTests {
     @BeforeEach
     fun setup() {
         val consumerProps = KafkaTestUtils.consumerProps("kafka-mongo-comparison", "true", embeddedKafkaBroker)
-//        val consumerFactory: ConsumerFactory<String, String> = DefaultKafkaConsumerFactory<String, String>(consumerProps, StringDeserializer(), StringDeserializer())
         val producerFactory: ProducerFactory<String, String> = DefaultKafkaProducerFactory<String, String>(consumerProps, StringSerializer(), StringSerializer())
-//        consumer = consumerFactory.createConsumer()
         producer = producerFactory.createProducer()
-//        embeddedKafkaBroker.consumeFromAnEmbeddedTopic(consumer, "user-topic")
     }
 
     @Test
