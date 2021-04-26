@@ -14,8 +14,11 @@ class MessageRepository(
     fun getLocalMessages(): Map<String, String> {
         while (true) {
             try {
+                // Get the state store
                 val stateStore = store.getStore()
 
+                // Gets all values from state store and converts from a
+                // KeyValueIterator (Kafka specific) to a Map
                 return convertKeyValuesToMap(stateStore.all())
             } catch (e: InvalidStateStoreException) {
                 // store not yet ready for querying

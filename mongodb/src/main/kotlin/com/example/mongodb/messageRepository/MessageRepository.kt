@@ -15,6 +15,7 @@ class MessageRepository(
         private val timeTracker: TimeTracker
 ) {
 
+    // Write message to the database
     fun save(message: String) {
         val newMessage = Message(key = "1", data = message)
         logger.info { "***Trying to save message: $message" }

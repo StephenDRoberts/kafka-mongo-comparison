@@ -26,14 +26,17 @@ class Topology (
     init {
         val stringSerde = Serdes.String()
 
+        // Consume from topic
         builder.stream("message-topic", Consumed.with(stringSerde, stringSerde))
                 .map { key, value ->
                     KeyValue(key, value)
                 }
+                // Start timing transaction
                 .peek { _, value ->
                     logger.info { "Placing message to State store: $value" }
                     timeTracker.addTiming(Instant.now())
                 }
+                // Write to persistent state-store
                 .toTable(
                         Materialized.`as`<String, String>(Stores.persistentKeyValueStore("message-store"))
                                 .withKeySerde(stringSerde)

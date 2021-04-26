@@ -45,18 +45,22 @@ class Poller() {
     fun poller() {
         var passInputValidation = false
         var input = ""
+
+        // While loop to keep prompting user for valid application to save results to respective file
         while(!passInputValidation) {
             inputPrompt()
             input = readLine().toString()
             passInputValidation = inputValidationCheck(input)
         }
 
+        // Retrieves valid naming & port given chosen application
         val id = applicationOptions[input]?.get("id")
         val port = applicationOptions[input]?.get("port").toString()
 
         val newFileCreated = File("poller/src/main/resources/results/${id}.csv").createNewFile()
         val file = File("poller/src/main/resources/results/${id}.csv")
 
+        // If we need to create a new file, then headers are required in the csv
         if (newFileCreated) {
             createHeaders(file)
         }
@@ -135,15 +139,5 @@ class Poller() {
             }
         }
     }
-
-
-
-
-
-//    fun parseResponse(response: Response): DTO {
-//        val body = response.body?.string() ?: ""
-//        val jsonBody = objectMapper.readValue<DTO>(body)
-//        return jsonBody
-//    }
 }
 

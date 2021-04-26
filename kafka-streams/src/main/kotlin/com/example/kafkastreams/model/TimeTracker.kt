@@ -10,6 +10,7 @@ class TimeTracker(){
     fun addTiming(instant: Instant) {
       timings.add(instant)
     }
+
     fun getAllTimings(): MutableList<Instant> {
         return timings
     }

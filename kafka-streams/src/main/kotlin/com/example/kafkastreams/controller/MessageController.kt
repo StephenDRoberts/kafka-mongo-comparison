@@ -16,17 +16,20 @@ class MessageController(
         private val timeTracker: TimeTracker
 ) {
 
+    // Retrieve all messages - used by Poller for read performance
     @GetMapping
     fun getMessages() : Map<String, String> {
         logger.info { "Retrieving messages" }
         return messageRepository.getLocalMessages()
     }
 
+    // Retrieve a list of timings
     @GetMapping("/timings")
     fun getTimings(): MutableList<Instant> {
         return timeTracker.getAllTimings()
     }
 
+    // Used by the Poller application to retrieve a summary of write statistics
     @GetMapping("/timings/summary")
     fun getTimingsSummary(): TimingsSummary {
         val allTimings = timeTracker.getAllTimings()

@@ -8,4 +8,10 @@ echo $(docker exec "$CONTAINER_ID" /opt/kafka/bin/kafka-consumer-groups.sh --gro
 
 echo "Kafka offsets for Mongo reset"
 
+# Get Mongo DB container ID
+MONGO_CONTAINER_ID=$(docker ps --filter NAME="kafka-mongo-comparison_mongo_1
+" --format "{{.ID}}")
+
+
+
 exit $?

@@ -16,12 +16,15 @@ class MessageController(
         private val timeTracker: TimeTracker
         ) {
 
+    // Used by the Poller for read performance
     @GetMapping
     fun getAllMessages(): List<Message> = messageRepository.getAllMessages()
 
+    // Retrieve a list of timings
     @GetMapping("/timings")
     fun getTimings(): List<Instant> = timeTracker.getAllTimings()
 
+    // Used by the Poller application to retrieve a summary of write statistics
     @GetMapping("/timings/summary")
     fun getTimingsSummary(): TimingsSummary {
         val allTimings = timeTracker.getAllTimings()
