@@ -42,7 +42,6 @@ class IntegrationTests {
 //    @Autowired
 //    private lateinit var mongoTemplate: MongoTemplate
 
-//    private lateinit var consumer: Consumer<String, String>
     private lateinit var producer: Producer<String, String>
 
     @Autowired
