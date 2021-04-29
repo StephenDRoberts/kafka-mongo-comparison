@@ -4,8 +4,13 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/kafka-streams" />
     <file type="web" url="file://$PROJECT_DIR$/mongodb" />
+    <file type="web" url="file://$PROJECT_DIR$/poller" />
+    <file type="web" url="file://$PROJECT_DIR$/setup" />
   </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/poller/src/main/resources/results/mongoDb.csv" />
   </component>
 </project>

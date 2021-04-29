@@ -1,14 +1,13 @@
-package com.example.mongodb
+package com.example.setup
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 import org.springframework.kafka.annotation.EnableKafka
 
 @SpringBootApplication
 @EnableKafka
-class MongodbApplication
+class SetupApplication
 
 fun main(args: Array<String>) {
-	runApplication<MongodbApplication>(*args)
+	runApplication<SetupApplication>(*args)
 }
