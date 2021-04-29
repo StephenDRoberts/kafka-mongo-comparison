@@ -17,7 +17,7 @@ a Kafka Streams backed State store against a MongoDB based application within th
 
 ## Running the applications
 * With docker running on your desktop open a terminal and navigate to the `kafka-mongo-comparison` folder
-* Run `docker-compose up` command to bring up the Kafka, Zookeeper and MongoDB images as well as other external tools for debugging/visual purposes.
+* Run the `docker-compose up` command to bring up the Kafka, Zookeeper and MongoDB images as well as other external tools for debugging/visual purposes.
 * Run the Setup application. This will only need to be run once. To do so, either:
     1. navigate to the `setup folder` and run `./gradlew clean bootRun`; or
     2. run the application through your IDEs run functionality.
@@ -29,23 +29,26 @@ a Kafka Streams backed State store against a MongoDB based application within th
  
     The application will process all the messages in the `message-topic` kafka topic. 
     NOTE: once completed, do not stop the application. It will need to stay running for the Poller application to process results.
-* Run the Poller application. This will request statistics from the running application and save them to a CSV file.
+* Run the Poller application. This will request statistics from the running application and save them to a CSV file. The CSV files for both
+Kafka Streams and MongoDB are saved under `poller/src/main/resources/results/<filename>.csv`
+The Poller application will bring up a terminal asking which application you would like to populate statistics for (i.e. the running application).
      
-     TODO - dynamic changes between Mongo/KafkaStreams requests (ie ask which application to query, change port number  and excel output workbook name accordingly).
+     
 
 ## Setup Module
 
 The purpose of the setup module is to create the experiment's data set.
 This is done via a `@PostConstruct` annotation in the MessageGenerator class that runs a function on setup.
- 
 
-#### Manually reset offsets
+#### Resetting offsets
 
 The setup script will create our data set. Ideally it would only want to be run once to avoid extra work.
 
 To enable this, there are two shell scripts that run as pre-launch configurations for both the MongoDB application, and the Kafka streams version.
 These scripts reset the offsets read by the application and need to be run only when the application is in a STOPPED state. 
 Therefore, rather than restarting the application you need to ensure that it is stopped fully before restarting, else the reset command will fail. 
+
+To allow for this automatically, the IDE configuration will need to be applied to call the relative reset script as a pre-launch operation.
 
 An alternative way to do this is to manually reset the offset on the docker image. To do this, run the following commands:  
 
